@@ -1,0 +1,1026 @@
+metadata:
+  createdAt: '2025-12-04T21:58:14.221Z'
+  modifiedAt: '2025-12-04T22:18:22.621Z'
+project:
+  id: cdc16b90-9ba8-48a3-9e90-8cae5586c2c3
+  integrations: []
+  name: rita
+  notebooks:
+    - blocks:
+        - blockGroup: 318b312b-4acf-47cd-86d3-4567a307be13
+          content: |-
+            import requests
+            from io import StringIO
+            import pandas as pd
+          id: b0c47ffaec9190dab4bee287ff0d7346
+          metadata: {}
+          sortingKey: a1
+          type: code
+        - blockGroup: 5e6a64fd-c22f-4697-adb2-7ffd2148665d
+          content: |
+            url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat"
+
+            colnames = [
+                    "AirportID",
+                    "Name",
+                    "City",
+                    "Country",
+                    "IATA",
+                    "ICAO",
+                    "Latitude",
+                    "Longitude",
+                    "Altitude",
+                    "Timezone",
+                    "DST",
+                    "TzDatabaseTimeZone",
+                    "Type",
+                    "Source"
+                ]
+
+            response = requests.get(url)
+            data = StringIO(response.text)
+
+            airports = pd.read_csv(data, header=None, names=colnames, dtype={"IATA": "string"})
+            airports = airports[airports["IATA"].notna()]
+            airports = airports[airports["IATA"] != "\\N"]
+          id: ad2a8684-9353-4d05-a945-7e4a0a6016a6
+          metadata:
+            deepnote_table_state:
+              pageIndex: 1
+          sortingKey: '1'
+          type: code
+          outputs: []
+        - blockGroup: df422df6-c256-460f-b25c-1e4adfd9f122
+          content: airports.groupby("Country")["AirportID"].count().reset_index()
+          id: e7e145bd-9b1a-435d-ad1a-ca772f19896b
+          metadata:
+            deepnote_table_state:
+              pageIndex: 22
+          sortingKey: '2'
+          type: code
+          outputs:
+            - data:
+                text/html: |-
+                  <div>
+                  <style scoped>
+                      .dataframe tbody tr th:only-of-type {
+                          vertical-align: middle;
+                      }
+
+                      .dataframe tbody tr th {
+                          vertical-align: top;
+                      }
+
+                      .dataframe thead th {
+                          text-align: right;
+                      }
+                  </style>
+                  <table border="1" class="dataframe">
+                    <thead>
+                      <tr style="text-align: right;">
+                        <th></th>
+                        <th>Country</th>
+                        <th>AirportID</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>0</th>
+                        <td>Afghanistan</td>
+                        <td>21</td>
+                      </tr>
+                      <tr>
+                        <th>1</th>
+                        <td>Albania</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <th>2</th>
+                        <td>Algeria</td>
+                        <td>39</td>
+                      </tr>
+                      <tr>
+                        <th>3</th>
+                        <td>American Samoa</td>
+                        <td>2</td>
+                      </tr>
+                      <tr>
+                        <th>4</th>
+                        <td>Angola</td>
+                        <td>24</td>
+                      </tr>
+                      <tr>
+                        <th>...</th>
+                        <td>...</td>
+                        <td>...</td>
+                      </tr>
+                      <tr>
+                        <th>230</th>
+                        <td>Wallis and Futuna</td>
+                        <td>2</td>
+                      </tr>
+                      <tr>
+                        <th>231</th>
+                        <td>Western Sahara</td>
+                        <td>3</td>
+                      </tr>
+                      <tr>
+                        <th>232</th>
+                        <td>Yemen</td>
+                        <td>10</td>
+                      </tr>
+                      <tr>
+                        <th>233</th>
+                        <td>Zambia</td>
+                        <td>11</td>
+                      </tr>
+                      <tr>
+                        <th>234</th>
+                        <td>Zimbabwe</td>
+                        <td>11</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p>235 rows × 2 columns</p>
+                  </div>
+                application/vnd.deepnote.dataframe.v3+json:
+                  column_count: 2
+                  columns:
+                    - name: Country
+                      dtype: object
+                      stats:
+                        unique_count: 235
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: Afghanistan
+                            count: 1
+                          - name: Albania
+                            count: 1
+                          - name: 233 others
+                            count: 233
+                    - name: AirportID
+                      dtype: int64
+                      stats:
+                        unique_count: 60
+                        nan_count: 0
+                        min: '1'
+                        max: '1251'
+                        histogram:
+                          - bin_start: 1
+                            bin_end: 126
+                            count: 228
+                          - bin_start: 126
+                            bin_end: 251
+                            count: 4
+                          - bin_start: 251
+                            bin_end: 376
+                            count: 1
+                          - bin_start: 376
+                            bin_end: 501
+                            count: 1
+                          - bin_start: 501
+                            bin_end: 626
+                            count: 0
+                          - bin_start: 626
+                            bin_end: 751
+                            count: 0
+                          - bin_start: 751
+                            bin_end: 876
+                            count: 0
+                          - bin_start: 876
+                            bin_end: 1001
+                            count: 0
+                          - bin_start: 1001
+                            bin_end: 1126
+                            count: 0
+                          - bin_start: 1126
+                            bin_end: 1251
+                            count: 1
+                        categories: null
+                    - name: _deepnote_index_column
+                      dtype: int64
+                  row_count: 235
+                  preview_row_count: 235
+                  rows:
+                    - Country: United Arab Emirates
+                      AirportID: 11
+                      _deepnote_index_column: 220
+                    - Country: United Kingdom
+                      AirportID: 108
+                      _deepnote_index_column: 221
+                    - Country: United States
+                      AirportID: 1251
+                      _deepnote_index_column: 222
+                    - Country: Uruguay
+                      AirportID: 9
+                      _deepnote_index_column: 223
+                    - Country: Uzbekistan
+                      AirportID: 12
+                      _deepnote_index_column: 224
+                    - Country: Vanuatu
+                      AirportID: 29
+                      _deepnote_index_column: 225
+                    - Country: Venezuela
+                      AirportID: 48
+                      _deepnote_index_column: 226
+                    - Country: Vietnam
+                      AirportID: 23
+                      _deepnote_index_column: 227
+                    - Country: Virgin Islands
+                      AirportID: 3
+                      _deepnote_index_column: 228
+                    - Country: Wake Island
+                      AirportID: 1
+                      _deepnote_index_column: 229
+                  type: dataframe
+                text/plain: |2-
+                                 Country  AirportID
+                  0          Afghanistan         21
+                  1              Albania          1
+                  2              Algeria         39
+                  3       American Samoa          2
+                  4               Angola         24
+                  ..                 ...        ...
+                  230  Wallis and Futuna          2
+                  231     Western Sahara          3
+                  232              Yemen         10
+                  233             Zambia         11
+                  234           Zimbabwe         11
+
+                  [235 rows x 2 columns]
+              execution_count: 34
+              output_type: execute_result
+              metadata:
+                cellId: e7e145bd-9b1a-435d-ad1a-ca772f19896b
+                deepnote_table_state:
+                  pageIndex: 22
+                cellIndex: 3
+                outputType: execute_result
+                id: e7e145bd-9b1a-435d-ad1a-ca772f19896b
+                __hadOutputs: true
+                __deepnotePocket:
+                  blockGroup: df422df6-c256-460f-b25c-1e4adfd9f122
+                  sortingKey: '2'
+                  type: code
+                table_state_spec: '{"pageIndex":22}'
+                metadata:
+                  table_state_spec: '{"pageIndex":22}'
+        - blockGroup: e189d34e-e598-4fa3-995e-f24ce1f384af
+          content: airports.query("Country == 'United States'")
+          id: 9b056c5dd1cbc2a5f503438b58b4897f
+          metadata: {}
+          sortingKey: a3
+          type: code
+          outputs:
+            - data:
+                text/html: |-
+                  <div>
+                  <style scoped>
+                      .dataframe tbody tr th:only-of-type {
+                          vertical-align: middle;
+                      }
+
+                      .dataframe tbody tr th {
+                          vertical-align: top;
+                      }
+
+                      .dataframe thead th {
+                          text-align: right;
+                      }
+                  </style>
+                  <table border="1" class="dataframe">
+                    <thead>
+                      <tr style="text-align: right;">
+                        <th></th>
+                        <th>AirportID</th>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>IATA</th>
+                        <th>ICAO</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Altitude</th>
+                        <th>Timezone</th>
+                        <th>DST</th>
+                        <th>TzDatabaseTimeZone</th>
+                        <th>Type</th>
+                        <th>Source</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>3212</th>
+                        <td>3411</td>
+                        <td>Barter Island LRRS Airport</td>
+                        <td>Barter Island</td>
+                        <td>United States</td>
+                        <td>BTI</td>
+                        <td>PABA</td>
+                        <td>70.134003</td>
+                        <td>-143.582001</td>
+                        <td>2</td>
+                        <td>-9</td>
+                        <td>A</td>
+                        <td>America/Anchorage</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>3214</th>
+                        <td>3413</td>
+                        <td>Cape Lisburne LRRS Airport</td>
+                        <td>Cape Lisburne</td>
+                        <td>United States</td>
+                        <td>LUR</td>
+                        <td>PALU</td>
+                        <td>68.875099</td>
+                        <td>-166.110001</td>
+                        <td>16</td>
+                        <td>-9</td>
+                        <td>A</td>
+                        <td>America/Anchorage</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>3215</th>
+                        <td>3414</td>
+                        <td>Point Lay LRRS Airport</td>
+                        <td>Point Lay</td>
+                        <td>United States</td>
+                        <td>PIZ</td>
+                        <td>PPIZ</td>
+                        <td>69.732903</td>
+                        <td>-163.005005</td>
+                        <td>22</td>
+                        <td>-9</td>
+                        <td>A</td>
+                        <td>America/Anchorage</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>3216</th>
+                        <td>3415</td>
+                        <td>Hilo International Airport</td>
+                        <td>Hilo</td>
+                        <td>United States</td>
+                        <td>ITO</td>
+                        <td>PHTO</td>
+                        <td>19.721399</td>
+                        <td>-155.048004</td>
+                        <td>38</td>
+                        <td>-10</td>
+                        <td>N</td>
+                        <td>Pacific/Honolulu</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>3217</th>
+                        <td>3416</td>
+                        <td>Orlando Executive Airport</td>
+                        <td>Orlando</td>
+                        <td>United States</td>
+                        <td>ORL</td>
+                        <td>KORL</td>
+                        <td>28.545500</td>
+                        <td>-81.332901</td>
+                        <td>113</td>
+                        <td>-5</td>
+                        <td>A</td>
+                        <td>America/New_York</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>...</th>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                      </tr>
+                      <tr>
+                        <th>7436</th>
+                        <td>13336</td>
+                        <td>Clarks Point Airport</td>
+                        <td>Clarks Point</td>
+                        <td>United States</td>
+                        <td>CLP</td>
+                        <td>PFCL</td>
+                        <td>58.833698</td>
+                        <td>-158.529007</td>
+                        <td>80</td>
+                        <td>-9</td>
+                        <td>A</td>
+                        <td>\N</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>7508</th>
+                        <td>13439</td>
+                        <td>Red Dog Airport</td>
+                        <td>Red Dog</td>
+                        <td>United States</td>
+                        <td>RDB</td>
+                        <td>PADG</td>
+                        <td>68.032097</td>
+                        <td>-162.899002</td>
+                        <td>969</td>
+                        <td>-9</td>
+                        <td>A</td>
+                        <td>\N</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>7630</th>
+                        <td>13707</td>
+                        <td>Seldovia Airport</td>
+                        <td>Seldovia</td>
+                        <td>United States</td>
+                        <td>SOV</td>
+                        <td>PASO</td>
+                        <td>59.442402</td>
+                        <td>-151.703995</td>
+                        <td>29</td>
+                        <td>-9</td>
+                        <td>A</td>
+                        <td>\N</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>7651</th>
+                        <td>13757</td>
+                        <td>Vidalia Regional Airport</td>
+                        <td>Vidalia</td>
+                        <td>United States</td>
+                        <td>VDI</td>
+                        <td>KVDI</td>
+                        <td>32.192699</td>
+                        <td>-82.371201</td>
+                        <td>275</td>
+                        <td>-4</td>
+                        <td>A</td>
+                        <td>\N</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                      <tr>
+                        <th>7665</th>
+                        <td>13803</td>
+                        <td>Mitchell Municipal Airport</td>
+                        <td>Mitchell</td>
+                        <td>United States</td>
+                        <td>MHE</td>
+                        <td>KMHE</td>
+                        <td>43.774799</td>
+                        <td>-98.038597</td>
+                        <td>1304</td>
+                        <td>-6</td>
+                        <td>A</td>
+                        <td>\N</td>
+                        <td>airport</td>
+                        <td>OurAirports</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p>1251 rows × 14 columns</p>
+                  </div>
+                application/vnd.deepnote.dataframe.v3+json:
+                  column_count: 14
+                  columns:
+                    - name: AirportID
+                      dtype: int64
+                      stats:
+                        unique_count: 1251
+                        nan_count: 0
+                        min: '3411'
+                        max: '13803'
+                        histogram:
+                          - bin_start: 3411
+                            bin_end: 4450.2
+                            count: 584
+                          - bin_start: 4450.2
+                            bin_end: 5489.4
+                            count: 0
+                          - bin_start: 5489.4
+                            bin_end: 6528.6
+                            count: 93
+                          - bin_start: 6528.6
+                            bin_end: 7567.8
+                            count: 193
+                          - bin_start: 7567.8
+                            bin_end: 8607
+                            count: 164
+                          - bin_start: 8607
+                            bin_end: 9646.2
+                            count: 81
+                          - bin_start: 9646.2
+                            bin_end: 10685.400000000001
+                            count: 32
+                          - bin_start: 10685.400000000001
+                            bin_end: 11724.6
+                            count: 31
+                          - bin_start: 11724.6
+                            bin_end: 12763.800000000001
+                            count: 52
+                          - bin_start: 12763.800000000001
+                            bin_end: 13803
+                            count: 21
+                        categories: null
+                    - name: Name
+                      dtype: object
+                      stats:
+                        unique_count: 1248
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: Capital City Airport
+                            count: 3
+                          - name: Lawrence Municipal Airport
+                            count: 2
+                          - name: 1246 others
+                            count: 1246
+                    - name: City
+                      dtype: object
+                      stats:
+                        unique_count: 1077
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: Houston
+                            count: 6
+                          - name: Columbus
+                            count: 6
+                          - name: 1075 others
+                            count: 1239
+                    - name: Country
+                      dtype: object
+                      stats:
+                        unique_count: 1
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: United States
+                            count: 1251
+                    - name: IATA
+                      dtype: string
+                      stats:
+                        unique_count: 1251
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: BTI
+                            count: 1
+                          - name: LUR
+                            count: 1
+                          - name: 1249 others
+                            count: 1249
+                    - name: ICAO
+                      dtype: object
+                      stats:
+                        unique_count: 1251
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: PABA
+                            count: 1
+                          - name: PALU
+                            count: 1
+                          - name: 1249 others
+                            count: 1249
+                    - name: Latitude
+                      dtype: float64
+                      stats:
+                        unique_count: 1251
+                        nan_count: 0
+                        min: '19.721399307250977'
+                        max: '71.285402'
+                        histogram:
+                          - bin_start: 19.721399307250977
+                            bin_end: 24.87779957652588
+                            count: 22
+                          - bin_start: 24.87779957652588
+                            bin_end: 30.03419984580078
+                            count: 83
+                          - bin_start: 30.03419984580078
+                            bin_end: 35.19060011507568
+                            count: 283
+                          - bin_start: 35.19060011507568
+                            bin_end: 40.347000384350586
+                            count: 303
+                          - bin_start: 40.347000384350586
+                            bin_end: 45.50340065362549
+                            count: 290
+                          - bin_start: 45.50340065362549
+                            bin_end: 50.65980092290039
+                            count: 93
+                          - bin_start: 50.65980092290039
+                            bin_end: 55.81620119217529
+                            count: 16
+                          - bin_start: 55.81620119217529
+                            bin_end: 60.972601461450196
+                            count: 63
+                          - bin_start: 60.972601461450196
+                            bin_end: 66.1290017307251
+                            count: 69
+                          - bin_start: 66.1290017307251
+                            bin_end: 71.285402
+                            count: 29
+                        categories: null
+                    - name: Longitude
+                      dtype: float64
+                      stats:
+                        unique_count: 1249
+                        nan_count: 0
+                        min: '-176.64599609375'
+                        max: '174.1139984'
+                        histogram:
+                          - bin_start: -176.64599609375
+                            bin_end: -141.569996644375
+                            count: 176
+                          - bin_start: -141.569996644375
+                            bin_end: -106.49399719499999
+                            count: 279
+                          - bin_start: -106.49399719499999
+                            bin_end: -71.41799774562499
+                            count: 767
+                          - bin_start: -71.41799774562499
+                            bin_end: -36.34199829624998
+                            count: 26
+                          - bin_start: -36.34199829624998
+                            bin_end: -1.265998846874993
+                            count: 0
+                          - bin_start: -1.265998846874993
+                            bin_end: 33.810000602500025
+                            count: 1
+                          - bin_start: 33.810000602500025
+                            bin_end: 68.88600005187504
+                            count: 1
+                          - bin_start: 68.88600005187504
+                            bin_end: 103.96199950125003
+                            count: 0
+                          - bin_start: 103.96199950125003
+                            bin_end: 139.03799895062502
+                            count: 0
+                          - bin_start: 139.03799895062502
+                            bin_end: 174.1139984
+                            count: 1
+                        categories: null
+                    - name: Altitude
+                      dtype: int64
+                      stats:
+                        unique_count: 856
+                        nan_count: 0
+                        min: '-115'
+                        max: '9070'
+                        histogram:
+                          - bin_start: -115
+                            bin_end: 803.5
+                            count: 773
+                          - bin_start: 803.5
+                            bin_end: 1722
+                            count: 250
+                          - bin_start: 1722
+                            bin_end: 2640.5
+                            count: 66
+                          - bin_start: 2640.5
+                            bin_end: 3559
+                            count: 32
+                          - bin_start: 3559
+                            bin_end: 4477.5
+                            count: 50
+                          - bin_start: 4477.5
+                            bin_end: 5396
+                            count: 28
+                          - bin_start: 5396
+                            bin_end: 6314.5
+                            count: 21
+                          - bin_start: 6314.5
+                            bin_end: 7233
+                            count: 25
+                          - bin_start: 7233
+                            bin_end: 8151.5
+                            count: 5
+                          - bin_start: 8151.5
+                            bin_end: 9070
+                            count: 1
+                        categories: null
+                    - name: Timezone
+                      dtype: object
+                      stats:
+                        unique_count: 10
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: '-5'
+                            count: 405
+                          - name: '-6'
+                            count: 304
+                          - name: 8 others
+                            count: 542
+                    - name: DST
+                      dtype: object
+                      stats:
+                        unique_count: 5
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: A
+                            count: 1159
+                          - name: \N
+                            count: 48
+                          - name: 3 others
+                            count: 44
+                    - name: TzDatabaseTimeZone
+                      dtype: object
+                      stats:
+                        unique_count: 10
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: America/New_York
+                            count: 367
+                          - name: America/Chicago
+                            count: 296
+                          - name: 8 others
+                            count: 588
+                    - name: Type
+                      dtype: object
+                      stats:
+                        unique_count: 1
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: airport
+                            count: 1251
+                    - name: Source
+                      dtype: object
+                      stats:
+                        unique_count: 1
+                        nan_count: 0
+                        min: null
+                        max: null
+                        histogram: null
+                        categories:
+                          - name: OurAirports
+                            count: 1251
+                    - name: _deepnote_index_column
+                      dtype: int64
+                  row_count: 1251
+                  preview_row_count: 1251
+                  rows:
+                    - AirportID: 3411
+                      Name: Barter Island LRRS Airport
+                      City: Barter Island
+                      Country: United States
+                      IATA: BTI
+                      ICAO: PABA
+                      Latitude: 70.1340026855
+                      Longitude: -143.582000732
+                      Altitude: 2
+                      Timezone: '-9'
+                      DST: A
+                      TzDatabaseTimeZone: America/Anchorage
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3212
+                    - AirportID: 3413
+                      Name: Cape Lisburne LRRS Airport
+                      City: Cape Lisburne
+                      Country: United States
+                      IATA: LUR
+                      ICAO: PALU
+                      Latitude: 68.87509918
+                      Longitude: -166.1100006
+                      Altitude: 16
+                      Timezone: '-9'
+                      DST: A
+                      TzDatabaseTimeZone: America/Anchorage
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3214
+                    - AirportID: 3414
+                      Name: Point Lay LRRS Airport
+                      City: Point Lay
+                      Country: United States
+                      IATA: PIZ
+                      ICAO: PPIZ
+                      Latitude: 69.73290253
+                      Longitude: -163.0050049
+                      Altitude: 22
+                      Timezone: '-9'
+                      DST: A
+                      TzDatabaseTimeZone: America/Anchorage
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3215
+                    - AirportID: 3415
+                      Name: Hilo International Airport
+                      City: Hilo
+                      Country: United States
+                      IATA: ITO
+                      ICAO: PHTO
+                      Latitude: 19.721399307250977
+                      Longitude: -155.04800415039062
+                      Altitude: 38
+                      Timezone: '-10'
+                      DST: 'N'
+                      TzDatabaseTimeZone: Pacific/Honolulu
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3216
+                    - AirportID: 3416
+                      Name: Orlando Executive Airport
+                      City: Orlando
+                      Country: United States
+                      IATA: ORL
+                      ICAO: KORL
+                      Latitude: 28.5455
+                      Longitude: -81.332901
+                      Altitude: 113
+                      Timezone: '-5'
+                      DST: A
+                      TzDatabaseTimeZone: America/New_York
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3217
+                    - AirportID: 3417
+                      Name: Bettles Airport
+                      City: Bettles
+                      Country: United States
+                      IATA: BTT
+                      ICAO: PABT
+                      Latitude: 66.91390228
+                      Longitude: -151.529007
+                      Altitude: 647
+                      Timezone: '-9'
+                      DST: A
+                      TzDatabaseTimeZone: America/Anchorage
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3218
+                    - AirportID: 3419
+                      Name: Indian Mountain LRRS Airport
+                      City: Indian Mountains
+                      Country: United States
+                      IATA: UTO
+                      ICAO: PAIM
+                      Latitude: 65.99279785
+                      Longitude: -153.7039948
+                      Altitude: 1273
+                      Timezone: '-9'
+                      DST: A
+                      TzDatabaseTimeZone: America/Anchorage
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3220
+                    - AirportID: 3420
+                      Name: Fort Yukon Airport
+                      City: Fort Yukon
+                      Country: United States
+                      IATA: FYU
+                      ICAO: PFYU
+                      Latitude: 66.57150268554688
+                      Longitude: -145.25
+                      Altitude: 433
+                      Timezone: '-9'
+                      DST: A
+                      TzDatabaseTimeZone: America/Anchorage
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3221
+                    - AirportID: 3421
+                      Name: Sparrevohn LRRS Airport
+                      City: Sparrevohn
+                      Country: United States
+                      IATA: SVW
+                      ICAO: PASV
+                      Latitude: 61.09740067
+                      Longitude: -155.5740051
+                      Altitude: 1585
+                      Timezone: '-9'
+                      DST: A
+                      TzDatabaseTimeZone: America/Anchorage
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3222
+                    - AirportID: 3422
+                      Name: Bryant Army Heliport
+                      City: Fort Richardson
+                      Country: United States
+                      IATA: FRN
+                      ICAO: PAFR
+                      Latitude: 61.26639938
+                      Longitude: -149.6529999
+                      Altitude: 378
+                      Timezone: '-9'
+                      DST: A
+                      TzDatabaseTimeZone: America/Anchorage
+                      Type: airport
+                      Source: OurAirports
+                      _deepnote_index_column: 3223
+                  type: dataframe
+                text/plain: |2-
+                        AirportID                        Name           City        Country  \
+                  3212       3411  Barter Island LRRS Airport  Barter Island  United States   
+                  3214       3413  Cape Lisburne LRRS Airport  Cape Lisburne  United States   
+                  3215       3414      Point Lay LRRS Airport      Point Lay  United States   
+                  3216       3415  Hilo International Airport           Hilo  United States   
+                  3217       3416   Orlando Executive Airport        Orlando  United States   
+                  ...         ...                         ...            ...            ...   
+                  7436      13336        Clarks Point Airport   Clarks Point  United States   
+                  7508      13439             Red Dog Airport        Red Dog  United States   
+                  7630      13707            Seldovia Airport       Seldovia  United States   
+                  7651      13757    Vidalia Regional Airport        Vidalia  United States   
+                  7665      13803  Mitchell Municipal Airport       Mitchell  United States   
+
+                       IATA  ICAO   Latitude   Longitude  Altitude Timezone DST  \
+                  3212  BTI  PABA  70.134003 -143.582001         2       -9   A   
+                  3214  LUR  PALU  68.875099 -166.110001        16       -9   A   
+                  3215  PIZ  PPIZ  69.732903 -163.005005        22       -9   A   
+                  3216  ITO  PHTO  19.721399 -155.048004        38      -10   N   
+                  3217  ORL  KORL  28.545500  -81.332901       113       -5   A   
+                  ...   ...   ...        ...         ...       ...      ...  ..   
+                  7436  CLP  PFCL  58.833698 -158.529007        80       -9   A   
+                  7508  RDB  PADG  68.032097 -162.899002       969       -9   A   
+                  7630  SOV  PASO  59.442402 -151.703995        29       -9   A   
+                  7651  VDI  KVDI  32.192699  -82.371201       275       -4   A   
+                  7665  MHE  KMHE  43.774799  -98.038597      1304       -6   A   
+
+                       TzDatabaseTimeZone     Type       Source  
+                  3212  America/Anchorage  airport  OurAirports  
+                  3214  America/Anchorage  airport  OurAirports  
+                  3215  America/Anchorage  airport  OurAirports  
+                  3216   Pacific/Honolulu  airport  OurAirports  
+                  3217   America/New_York  airport  OurAirports  
+                  ...                 ...      ...          ...  
+                  7436                 \N  airport  OurAirports  
+                  7508                 \N  airport  OurAirports  
+                  7630                 \N  airport  OurAirports  
+                  7651                 \N  airport  OurAirports  
+                  7665                 \N  airport  OurAirports  
+
+                  [1251 rows x 14 columns]
+              execution_count: 35
+              output_type: execute_result
+              metadata:
+                cellId: vscode-notebook-cell:/Users/mi30743/sandbox/rita/rita.deepnote#W4sZmlsZQ%3D%3D
+                cellIndex: 4
+                outputType: execute_result
+                table_state_spec: '{}'
+                metadata:
+                  table_state_spec: '{}'
+        - blockGroup: de5883e9-dc83-46ae-a445-735d5e9f91de
+          content: airports.to_csv("./data/airports.csv", index=False)
+          id: 3a6cc6f80fdd92fa5d3553ef1b303c15
+          metadata: {}
+          sortingKey: a4
+          type: code
+        - blockGroup: 87369487-1949-4843-a34e-ac1484714ef9
+          content: ''
+          id: 9d7466d438f22aed264d8d7f798949ba
+          metadata: {}
+          sortingKey: a5
+          type: code
+      executionMode: block
+      id: a8fc42e4-e0b7-436f-b08a-8256ab8c2285
+      isModule: false
+      name: rita
+  settings: {}
+version: 1.0.0
